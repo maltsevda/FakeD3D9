@@ -6,6 +6,7 @@ Features:
 * Shadows
 * Enhanced effects
 * Forced VSync
+* 1920x1080 support
 
 Thanks to:
 * https://github.com/vikbez/pacbrcade
@@ -16,4 +17,5 @@ Compile with Visual Studio 2019.
 
 Installation:
 * Copy d3d9.dll to game folder (SteamLibrary\SteamApps\common\Silent Storm)
+* If you want FullHD resolution then set the game resolution to 800x600
 * Enjoy
