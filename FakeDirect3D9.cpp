@@ -99,6 +99,12 @@ HMONITOR FakeDirect3D9::GetAdapterMonitor(UINT Adapter)
 
 HRESULT FakeDirect3D9::CreateDevice(UINT Adapter,D3DDEVTYPE DeviceType,HWND hFocusWindow,DWORD BehaviorFlags,D3DPRESENT_PARAMETERS* pPresentationParameters,IDirect3DDevice9** ppReturnedDeviceInterface)
 {
+	if (pPresentationParameters->BackBufferWidth == 800 &&
+		pPresentationParameters->BackBufferHeight == 600)
+	{
+		pPresentationParameters->BackBufferWidth = 1920;
+		pPresentationParameters->BackBufferHeight = 1080;
+	}
 	pPresentationParameters->PresentationInterval = D3DPRESENT_INTERVAL_ONE; // force VSYNC
 	HRESULT hres = m_pIDirect3D9->CreateDevice(Adapter, DeviceType, hFocusWindow, BehaviorFlags, pPresentationParameters, ppReturnedDeviceInterface);
 	*ppReturnedDeviceInterface = new FakeDirect3DDevice9(*ppReturnedDeviceInterface);
