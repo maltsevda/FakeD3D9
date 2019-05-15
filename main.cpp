@@ -42,8 +42,8 @@ extern "C" IDirect3D9* WINAPI Fake_Direct3DCreate9(UINT SDKVersion)
 {
 	typedef IDirect3D9* (WINAPI * DIRECT3DCREATEPROC)(UINT SDKVersion);
 	DIRECT3DCREATEPROC Direct3DCreate9Proc = (DIRECT3DCREATEPROC)d3d9dll.Direct3DCreate9;
-	IDirect3D9* pFakeDirect3D9 = Direct3DCreate9Proc(SDKVersion);
-	return new FakeDirect3D9(pFakeDirect3D9);
+	IDirect3D9* pRealDirect3D9 = Direct3DCreate9Proc(SDKVersion);
+	return new FakeDirect3D9(pRealDirect3D9);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
