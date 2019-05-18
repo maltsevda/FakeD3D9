@@ -46,6 +46,15 @@ extern "C" IDirect3D9* WINAPI Fake_Direct3DCreate9(UINT SDKVersion)
 	return new FakeDirect3D9(pRealDirect3D9);
 }
 
+// error LNK2019: unresolved external symbol _memcpy referenced in function _DllMain@12
+void MyCopyMemory(void* pDst, const void* pSrc, size_t uiSize)
+{
+	BYTE* pDstB = (BYTE*)pDst;
+	const BYTE* pSrcB = (const BYTE*)pSrc;
+	for (UINT i = 0; i < uiSize; ++i)
+		pDstB[i] = pSrcB[i];
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 {
 	switch (dwReason)
@@ -54,7 +63,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 	{
 		WCHAR path[MAX_PATH];
 		UINT length = GetSystemDirectoryW(path, MAX_PATH - 10);
-		CopyMemory(path + length, L"\\d3d9.dll", sizeof(WCHAR) * 11);
+		MyCopyMemory(path + length, L"\\d3d9.dll", sizeof(WCHAR) * 10);
 		d3d9dll.hDll = LoadLibraryW(path);
 		if (!d3d9dll.hDll)
 		{
@@ -84,3 +93,19 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 	}
 	return TRUE;
 }
+
+// error LNK2001: unresolved external symbol "void * __cdecl operator new(unsigned int)" (??2@YAPAXI@Z)
+void* __cdecl operator new(unsigned int size)
+{
+	return HeapAlloc(GetProcessHeap(), 0, size);
+}
+
+// error LNK2001: unresolved external symbol "void __cdecl operator delete(void *,unsigned int)" (??3@YAXPAXI@Z)
+void __cdecl operator delete(void* ptr, unsigned int)
+{
+	HeapFree(GetProcessHeap(), 0, ptr);
+}
+
+// error LNK2001: unresolved external symbol __fltused
+// it should be a single underscore since the double one is the mangled name
+extern "C" int _fltused = 0;
